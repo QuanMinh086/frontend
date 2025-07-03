@@ -27,9 +27,6 @@ function AuthProvider({ children }) {
   );
 }
 
-// Helper for API calls with base URL
-const BASE_URL = process.env.REACT_APP_BASE_URL;
-
 // --- Auth Pages ---
 function Signup() {
   const [form, setForm] = useState({ email: '', password: '', role: 'User' });
@@ -45,7 +42,7 @@ function Signup() {
         Password: form.password,
         UserRole: form.role,
       };
-      await axios.post(`${BASE_URL}/auth/signup`, payload);
+      await axios.post('/auth/signup', payload);
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Signup failed');
@@ -83,7 +80,7 @@ function Login() {
         Email: form.email,
         Password: form.password,
       };
-      const res = await axios.post(`${BASE_URL}/auth/login`, payload);
+      const res = await axios.post('/auth/login', payload);
       const data = res.data;
       if (!data.token) {
         setError('Login response missing token. Please check backend.');
@@ -148,7 +145,7 @@ function UserTransactions() {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState('');
   useEffect(() => {
-    axios.get(`${BASE_URL}/me/transactions`, {
+    axios.get('/me/transactions', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => setTransactions(res.data))
@@ -177,7 +174,7 @@ function UserInvestments() {
   const [investments, setInvestments] = useState([]);
   const [error, setError] = useState('');
   useEffect(() => {
-    axios.get(`${BASE_URL}/me/investments`, {
+    axios.get('/me/investments', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => setInvestments(res.data))
@@ -224,7 +221,7 @@ function AdminUsers() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   useEffect(() => {
-    axios.get(`${BASE_URL}/admin/users`, {
+    axios.get('/admin/users', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => setUsers(res.data))
@@ -234,7 +231,7 @@ function AdminUsers() {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.get(`${BASE_URL}/admin/users/email/${search}`, {
+      const res = await axios.get(`/admin/users/email/${search}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const user = res.data.user || res.data;
@@ -301,7 +298,7 @@ function AdminUserDetail() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/admin/users/email/${email}`, {
+    axios.get(`/admin/users/email/${email}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {
@@ -363,7 +360,7 @@ function AdminTransactions() {
     setError('');
     setResult(null);
     try {
-      const res = await axios.post(`${BASE_URL}/admin/transactions`, form, {
+      const res = await axios.post('/admin/transactions', form, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setResult(res.data);
@@ -403,7 +400,7 @@ function AdminInvestments() {
         amountInvested: form.amount,
         profitLoss: form.profitLoss,
       };
-      const res = await axios.post(`${BASE_URL}/admin/investments`, payload, {
+      const res = await axios.post('/admin/investments', payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setResult(res.data);
