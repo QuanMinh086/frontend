@@ -32,7 +32,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 // --- Auth Pages ---
 function Signup() {
-  const [form, setForm] = useState({ email: '', password: '', role: 'user' });
+  const [form, setForm] = useState({ email: '', password: '', role: 'User' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
@@ -43,7 +43,7 @@ function Signup() {
       const payload = {
         Email: form.email,
         Password: form.password,
-        Role: form.role,
+        UserRole: form.role,
       };
       await axios.post(`${BASE_URL}/auth/signup`, payload);
       navigate('/login');
@@ -58,8 +58,8 @@ function Signup() {
         <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required /><br />
         <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required /><br />
         <select name="role" value={form.role} onChange={handleChange}>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
+          <option value="User">User</option>
+          <option value="Admin">Admin</option>
         </select><br />
         <button type="submit">Sign Up</button>
       </form>
